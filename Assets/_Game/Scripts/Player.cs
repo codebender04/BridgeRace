@@ -5,29 +5,46 @@ using UnityEngine;
 
 public class Player : Character
 {
+    [SerializeField] private Transform tf;
     [SerializeField] private Rigidbody rb;
     [SerializeField] private FloatingJoystick joystick;
     [SerializeField] private float speed;
     [SerializeField] private LayerMask ground;
-    [SerializeField] private Transform raycastPoint;
-    private const float PLAYER_HEIGHT = 6f;
+
     private bool isPausing;
-    private void Start()
+
+    FloatingJoystick Joystick
     {
-        ChangeColor(ColorType.Green);
+        get
+        {
+            if (joystick == null)
+            {
+                joystick = FindObjectOfType<FloatingJoystick>();
+            }
+            return joystick;
+        }
     }
 
+
+    public void Initialize()
+    {
+        meshRenderer.enabled = true;
+        rb.position = Vector3.zero;
+        StopMovement();
+        ClearBrick();
+    }
+    
     private void Update()
     {
-        if (!isPausing)
-        {
-            joystick = FindObjectOfType<FloatingJoystick>();
-            HandleMovement();
-        }
+        HandleMovement();
+    }
+    public void StopMovement()
+    {
+        rb.velocity = Vector3.zero;
     }
     protected override void GameManager_OnGameStateChanged(GameState newState)
     {
-        if (newState == GameState.Menu)
+        if (newState == GameState.Pausing)
         {
             isPausing = true;
         }
@@ -38,10 +55,11 @@ public class Player : Character
     }
     private void HandleMovement()
     {
-        if (Mathf.Abs(joystick.Horizontal) > 0.1f || Mathf.Abs(joystick.Vertical) > 0.1f)
+        if (Joystick == null) return;
+        if (Mathf.Abs(Joystick.Horizontal) > 0.1f || Mathf.Abs(Joystick.Vertical) > 0.1f)
         {
-            rb.velocity = new Vector3(speed * joystick.Horizontal, - Mathf.Abs(rb.velocity.y), speed * joystick.Vertical);
-            transform.rotation = Quaternion.LookRotation(rb.velocity);
+            rb.velocity = new Vector3(speed * Joystick.Horizontal, -Mathf.Abs(rb.velocity.y), speed * Joystick.Vertical);
+            tf.rotation = Quaternion.LookRotation(rb.velocity);
             ChangeAnimation(Constants.ANIM_RUN);
         }
         else if (IsGrounded())
@@ -52,6 +70,6 @@ public class Player : Character
     }
     private bool IsGrounded()
     {
-        return Physics.Raycast(transform.position + new Vector3(0f, PLAYER_HEIGHT / 2, 0f), -transform.up, PLAYER_HEIGHT / 2 + 0.4f, ground);
+        return Physics.Raycast(transform.position + new Vector3(0f, Constants.CHARACTER_HEIGHT / 2, 0f), -transform.up, Constants.CHARACTER_HEIGHT / 2 + 0.4f, ground);
     }
 }

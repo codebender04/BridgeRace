@@ -12,7 +12,7 @@ public class BuildState : IState
 
     public void Execute(Bot bot)
     {
-        if (bot.BrickList.Count == 0)
+        if (bot.BrickCount == 0)
         {
             bot.ChangeState(new PatrolState());
         }

@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Character : MonoBehaviour
 {
@@ -9,17 +11,21 @@ public class Character : MonoBehaviour
     [SerializeField] private Animator animator;
     [SerializeField] protected ColorSO colorSO;
     [SerializeField] protected Renderer meshRenderer;
-    protected Stage currentStage;
+    public int BrickCount => brickList.Count;
     public ColorType Color => color;
-    public List<CharacterBrick> BrickList { get { return brickList; } }
     public Transform brickHoldPoint;
 
+    protected Stage currentStage;
     protected ColorType color;
+ 
     private List<CharacterBrick> brickList = new List<CharacterBrick>();
-    private string currentAnimName;
+    private string currentAnimName = Constants.ANIM_IDLE;
+
+
     private void OnEnable()
     {
         GameManager.OnGameStateChanged += GameManager_OnGameStateChanged;
+        ChangeColor((ColorType)Random.Range(0, Enum.GetNames(typeof(ColorType)).Length));
     }
 
     protected virtual void GameManager_OnGameStateChanged(GameState newState)
@@ -28,6 +34,7 @@ public class Character : MonoBehaviour
 
     protected virtual void OnTriggerEnter(Collider other)
     {
+        //TODO: Getcomponent + optimize cache
         if (other.TryGetComponent<Stage>(out Stage stage) && stage != currentStage)
         {
             currentStage = stage;
@@ -41,8 +48,10 @@ public class Character : MonoBehaviour
             if (levelBrick.Color == color || levelBrick.Color == ColorType.None)
             {
                 AddBrick();
-                currentStage?.RemoveBrick(levelBrick);
-                levelBrick.OnDespawn();
+                if (currentStage != null)
+                {
+                    currentStage.StartCoroutine(currentStage.RemoveBrick(levelBrick));
+                }
             }
         }
         if (other.TryGetComponent<Step>(out Step step))
@@ -53,30 +62,48 @@ public class Character : MonoBehaviour
                 step.Show(color);
             }
         }
+        if (other.TryGetComponent<WinStage>(out WinStage winStage))
+        {
+            ChangeAnimation(Constants.ANIM_DANCE);
+        }
     }
     protected void ChangeAnimation(string animName)
     {
         if (currentAnimName != animName)
         {
-            animator.ResetTrigger(animName);
+            animator.ResetTrigger(currentAnimName);
             currentAnimName = animName;
-            animator.SetTrigger(animName);
+            animator.SetTrigger(currentAnimName);
         }
     }
-    protected void ChangeColor(ColorType color)
+    public void ChangeColor(ColorType color)
     {
         this.color = color;
         meshRenderer.material = colorSO.GetMaterial(this.color);
     }
     private void AddBrick()
     {
-        CharacterBrick brick = Instantiate(brickPrefab.gameObject, brickHoldPoint.position, Quaternion.identity).GetComponent<CharacterBrick>();
+        //TODO: cache getcomponent
+        CharacterBrick brick = Instantiate(brickPrefab, brickHoldPoint.position, Quaternion.identity);
         brick.Initialize(this);
         brickList.Add(brick);
     }
     private void RemoveBrick()
     {
-        brickList[^1].Despawn();
-        brickList.Remove(brickList[^1]);
+        brickList.Last().Despawn();
+        brickList.Remove(brickList.Last());
+    }
+    protected void ClearBrick()
+    {
+        for (int i = brickList.Count - 1; i >= 0; i--)
+        {
+            brickList[i].Despawn(); 
+        }
+        brickList.Clear();
+    }
+    public void Hide()
+    {
+        meshRenderer.enabled = false;
+        ClearBrick();
     }
 }

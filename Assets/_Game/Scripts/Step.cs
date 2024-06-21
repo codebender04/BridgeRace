@@ -23,7 +23,7 @@ public class Step : MonoBehaviour
         {
             Player player = hitInfo.collider.GetComponent<Player>();
 
-            if (color != player.Color && player.BrickList.Count == 0)
+            if (color != player.Color && player.BrickCount == 0)
             {
                 ActivateWall();
             }

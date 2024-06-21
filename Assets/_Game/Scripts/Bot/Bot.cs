@@ -7,15 +7,12 @@ public class Bot : Character
 {
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private Stage[] stageArray;
-    private int currentStageIndex = 0;
     private Vector3 destination;
     private List<LevelBrick> targetBricksList = new List<LevelBrick>();
     private IState currentState;
-    private Stair currentStair;
     private void Start()
     {
         ChangeState(new IdleState());
-        ChangeColor(ColorType.Red);
     }
     private void Update()
     {
@@ -23,7 +20,7 @@ public class Bot : Character
     }
     protected override void GameManager_OnGameStateChanged(GameState newState)
     {
-        if (newState == GameState.Menu)
+        if (newState == GameState.Pausing)
         {
             ChangeState(new IdleState());
         }
@@ -40,10 +37,14 @@ public class Bot : Character
     {
         if (currentStage != null)
         {
-            destination = GetRandomBrickPosition();
+            SetDestination(GetRandomBrickPosition());
+            ChangeAnimation(Constants.ANIM_RUN);
         }
+    }
+    public void SetDestination(Vector3 destination)
+    {
+        this.destination = destination;
         agent.SetDestination(destination);
-        ChangeAnimation(Constants.ANIM_RUN);
     }
     public bool HasBricksToPickUp()
     {
@@ -56,18 +57,29 @@ public class Bot : Character
         targetBricksList = currentStage.GetBricksWithSameColor(color);
         int randomIndex = Random.Range(0, targetBricksList.Count);
 
-        if (targetBricksList.Count == 0) 
-        return transform.position;
-        else 
-        return targetBricksList[randomIndex].transform.position;
+        if (targetBricksList.Count == 0)
+        {
+            return transform.position;
+        }
+        else
+        {
+            return targetBricksList[randomIndex].transform.position;
+        }
     }
     public void GoToNextStage()
     {
-        agent.SetDestination(stageArray[1].GetRandomPointInBounds());
+        for (int i = 0; i < stageArray.Length - 1; i++)
+        {
+            if (currentStage == stageArray[i])
+            {
+                SetDestination(stageArray[i + 1].GetRandomPointInBounds());
+                break;
+            }
+        }
     }
     public void StopMovement()
     {
-        agent.SetDestination(transform.position);
+        SetDestination(transform.position);
         ChangeAnimation(Constants.ANIM_IDLE);
     }
     public void ChangeState(IState newState)

@@ -9,22 +9,22 @@ public class CanvasSettings : UICanvas
     {
         for (int i = 0; i < buttons.Length; i++)
         {
-            buttons[i].gameObject.SetActive(false);
+            buttons[i].SetActive(false);
         }
 
         if (canvas is CanvasMainMenu)
         {
-            buttons[2].gameObject.SetActive(true); 
+            buttons[2].SetActive(true);
         }
         else if (canvas is CanvasGameplay)
         {
-            buttons[0].gameObject.SetActive(true);
-            buttons[1].gameObject.SetActive(true);
+            buttons[0].SetActive(true);
+            buttons[1].SetActive(true);
         }
     }
     public void MainMenuButton()
     {
-        GameManager.Instance.ChangeGameState(GameState.Menu);
+        GameManager.Instance.ChangeGameState(GameState.Pausing);
         UIManager.Instance.CloseAll();
         UIManager.Instance.Open<CanvasMainMenu>();
     }

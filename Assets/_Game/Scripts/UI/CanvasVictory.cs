@@ -9,4 +9,11 @@ public class CanvasVictory : UICanvas
         UIManager.Instance.CloseAll();
         UIManager.Instance.Open<CanvasMainMenu>();
     }
+    public void NextLevelButton()
+    {
+        UIManager.Instance.CloseAll();
+        UIManager.Instance.Open<CanvasGameplay>();
+        GameManager.Instance.ChangeGameState(GameState.Playing);
+        LevelManager.Instance.LoadNextLevel();
+    }
 }

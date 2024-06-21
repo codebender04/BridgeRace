@@ -9,6 +9,7 @@ public enum ColorType
     Blue = 2,
     Green = 3,
     Orange = 4,
+    Yellow = 5, 
 }
 [CreateAssetMenu(menuName = "ColorData")]
 public class ColorSO : ScriptableObject

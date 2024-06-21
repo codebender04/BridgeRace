@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class Stage : MonoBehaviour
 {
-    [SerializeField] private List<LevelBrick> levelBrickList = new List<LevelBrick>();
+    [SerializeField] private Transform tf;
+    private List<LevelBrick> levelBrickList = new List<LevelBrick>();
     private Bounds bounds;
+    private float timer = 0;
     private void Awake()
     {
         bounds = GetComponent<BoxCollider>().bounds;
@@ -22,9 +26,17 @@ public class Stage : MonoBehaviour
         }
         return result;
     }
-    public void RemoveBrick(LevelBrick brickToRemove)
+    public IEnumerator RemoveBrick(LevelBrick brickToRemove)
     {
         levelBrickList.Remove(brickToRemove);
+        brickToRemove.OnDespawn();
+        yield return new WaitForSeconds(8f);
+        AddBrick(brickToRemove);
+    }
+    public void AddBrick(LevelBrick brickToAdd)
+    {
+        levelBrickList.Add(brickToAdd);
+        brickToAdd.transform.SetParent(tf);
     }
     public Vector3 GetRandomPointInBounds()
     {

@@ -185,7 +185,7 @@ Canvas:
   m_GameObject: {fileID: 1169227789467134281}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_Camera: {fileID: 0}
   m_PlaneDistance: 10
   m_PixelPerfect: 0
@@ -644,7 +644,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1461715942826304689}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7924577257304203888}
+        m_TargetAssemblyTypeName: CanvasVictory, Assembly-CSharp
+        m_MethodName: NextLevelButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4939175266053341138
 GameObject:
   m_ObjectHideFlags: 0

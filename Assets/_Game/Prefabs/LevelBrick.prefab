@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2397918365710710043}
   - component: {fileID: 7748194214027138489}
-  - component: {fileID: 1764809556901251144}
   - component: {fileID: 4777535018485270262}
+  - component: {fileID: 1764809556901251144}
   m_Layer: 0
   m_Name: LevelBrick
   m_TagString: Untagged
@@ -56,20 +56,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4, y: 0.4, z: 4}
   m_Center: {x: 0, y: 0.2, z: 0}
---- !u!114 &1764809556901251144
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4047304629227162612}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15c7e3beb57256b4b924804b21bb8aa6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 3908161557505456392}
-  colorSO: {fileID: 11400000, guid: 6bb1bcdae1cfc344db158f5c3fc506a8, type: 2}
 --- !u!54 &4777535018485270262
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -97,6 +83,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1764809556901251144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4047304629227162612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15c7e3beb57256b4b924804b21bb8aa6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshRenderer: {fileID: 3908161557505456392}
+  colorSO: {fileID: 11400000, guid: 6bb1bcdae1cfc344db158f5c3fc506a8, type: 2}
+  boxCollider: {fileID: 7748194214027138489}
 --- !u!1 &6694758734537635680
 GameObject:
   m_ObjectHideFlags: 0

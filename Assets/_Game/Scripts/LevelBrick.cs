@@ -1,45 +1,33 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class LevelBrick : MonoBehaviour
 {
     [SerializeField] private Renderer meshRenderer;
     [SerializeField] private ColorSO colorSO;
+    [SerializeField] private BoxCollider boxCollider;
     private ColorType color;
     public ColorType Color => color;
     private void Awake()
     {
-        float chance = Random.value;
-        if (chance < 0.2f)
-        {
-            color = ColorType.None;
-        } 
-        else if (chance < 0.4f)
-        {
-            color = ColorType.Red;
-        }
-        else if (chance < 0.6f)
-        {
-            color = ColorType.Blue;
-        }
-        else if (chance < 0.8f)
-        {
-            color = ColorType.Green;
-        }
-        else if (chance < 1f)
-        {
-            color = ColorType.Orange;
-        }
+        ColorType color = (ColorType)Random.Range(0, Enum.GetNames(typeof(ColorType)).Length);
         ChangeColor(color);
     }
     public void OnDespawn()
     {
         gameObject.SetActive(false);
+        Invoke(nameof(ActivateSelf), 8f);
     }
     public void ChangeColor(ColorType color)
     {
         this.color = color;
         meshRenderer.material = colorSO.GetMaterial(this.color);
+    }
+    private void ActivateSelf()
+    {
+        gameObject.SetActive(true);
     }
 }

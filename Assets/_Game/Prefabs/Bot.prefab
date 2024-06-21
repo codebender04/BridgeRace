@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 5039560024351660011}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.3, y: 0, z: 15.83}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -97,9 +97,12 @@ MonoBehaviour:
   animator: {fileID: 9151896396528772436}
   colorSO: {fileID: 11400000, guid: 6bb1bcdae1cfc344db158f5c3fc506a8, type: 2}
   meshRenderer: {fileID: 1572807336396902502}
-  currentStage: {fileID: 0}
   brickHoldPoint: {fileID: 7469010839475924857}
   agent: {fileID: 5129906879112685382}
+  stageArray:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &5279992222792369010
 GameObject:
   m_ObjectHideFlags: 0

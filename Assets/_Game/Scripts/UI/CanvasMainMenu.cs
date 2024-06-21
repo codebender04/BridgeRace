@@ -6,13 +6,14 @@ public class CanvasMainMenu : UICanvas
 {
     public void PlayButton()
     {
-        GameManager.Instance.ChangeGameState(GameState.Playing);
         Close(0);
+        GameManager.Instance.ChangeGameState(GameState.Playing);
         UIManager.Instance.Open<CanvasGameplay>();
+        LevelManager.Instance.LoadLevel();
     }
     public void SettingsButton()
     {
-        GameManager.Instance.ChangeGameState(GameState.Menu);
+        GameManager.Instance.ChangeGameState(GameState.Pausing);
         UIManager.Instance.Open<CanvasSettings>().SetState(this);
     }
 }
