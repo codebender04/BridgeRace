@@ -46,7 +46,8 @@ public class BrickSpawner : MonoBehaviour
     }
     private void Spawn(Vector3 spawnPosition)
     {
-        LevelBrick brick = Instantiate(levelBrick, spawnPosition, Quaternion.identity);
+        //LevelBrick brick = Instantiate(levelBrick, spawnPosition, Quaternion.identity);
+        LevelBrick brick = SimplePool.Spawn<LevelBrick>(PoolType.LevelBrick, spawnPosition, Quaternion.identity);
         stage.AddBrick(brick);
     }
 }

@@ -4,30 +4,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class LevelBrick : MonoBehaviour
+public class LevelBrick : GameUnit
 {
     [SerializeField] private Renderer meshRenderer;
     [SerializeField] private ColorSO colorSO;
     [SerializeField] private BoxCollider boxCollider;
     private ColorType color;
     public ColorType Color => color;
-    private void Awake()
+    private void OnEnable()
     {
         ColorType color = (ColorType)Random.Range(0, Enum.GetNames(typeof(ColorType)).Length);
         ChangeColor(color);
     }
     public void OnDespawn()
     {
-        gameObject.SetActive(false);
-        Invoke(nameof(ActivateSelf), 8f);
+        SimplePool.Despawn(this);    
+        //gameObject.SetActive(false);
+        Invoke(nameof(Respawn), 8f);
     }
     public void ChangeColor(ColorType color)
     {
         this.color = color;
         meshRenderer.material = colorSO.GetMaterial(this.color);
     }
-    private void ActivateSelf()
+    private void Respawn()
     {
-        gameObject.SetActive(true);
+        SimplePool.Spawn<LevelBrick>(PoolType.LevelBrick, transform.position, Quaternion.identity);
+        //gameObject.SetActive(true);
     }
 }

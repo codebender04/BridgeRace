@@ -2,7 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
+using UnityEngine.Timeline;
 using Random = UnityEngine.Random;
 
 public class Character : MonoBehaviour
@@ -17,34 +20,27 @@ public class Character : MonoBehaviour
 
     protected Stage currentStage;
     protected ColorType color;
- 
     private List<CharacterBrick> brickList = new List<CharacterBrick>();
     private string currentAnimName = Constants.ANIM_IDLE;
-
-
-    private void OnEnable()
-    {
-        GameManager.OnGameStateChanged += GameManager_OnGameStateChanged;
-        ChangeColor((ColorType)Random.Range(0, Enum.GetNames(typeof(ColorType)).Length));
-    }
-
-    protected virtual void GameManager_OnGameStateChanged(GameState newState)
-    {
-    }
-
+    private LevelBrick levelBrick;
+    private Step step;
     protected virtual void OnTriggerEnter(Collider other)
     {
-        //TODO: Getcomponent + optimize cache
-        if (other.TryGetComponent<Stage>(out Stage stage) && stage != currentStage)
+        if (other.CompareTag(Constants.TAG_STAGE))
         {
-            currentStage = stage;
+            Stage stage = Cache.GetStageComponent(other);
+            if (stage != null && stage != currentStage)
+            {
+                currentStage = stage;
+            }
             if (this is Bot bot && GameManager.Instance.GameState == GameState.Playing)
             {
                 bot.ChangeState(new PatrolState());
             }
         }
-        if (other.TryGetComponent<LevelBrick>(out LevelBrick levelBrick))
+        if (other.CompareTag(Constants.TAG_LEVELBRICK))
         {
+            levelBrick = Cache.GetLevelBrickComponent(other);
             if (levelBrick.Color == color || levelBrick.Color == ColorType.None)
             {
                 AddBrick();
@@ -54,17 +50,14 @@ public class Character : MonoBehaviour
                 }
             }
         }
-        if (other.TryGetComponent<Step>(out Step step))
+        if (other.CompareTag(Constants.TAG_STEP))
         {
+            step = Cache.GetStepComponent(other);
             if (brickList.Count > 0 && step.Color != color)
             {
                 RemoveBrick();
                 step.Show(color);
             }
-        }
-        if (other.TryGetComponent<WinStage>(out WinStage winStage))
-        {
-            ChangeAnimation(Constants.ANIM_DANCE);
         }
     }
     protected void ChangeAnimation(string animName)
@@ -83,8 +76,7 @@ public class Character : MonoBehaviour
     }
     private void AddBrick()
     {
-        //TODO: cache getcomponent
-        CharacterBrick brick = Instantiate(brickPrefab, brickHoldPoint.position, Quaternion.identity);
+        CharacterBrick brick = SimplePool.Spawn<CharacterBrick>(brickPrefab.PoolType, brickHoldPoint.position, brickHoldPoint.rotation);
         brick.Initialize(this);
         brickList.Add(brick);
     }
@@ -106,4 +98,13 @@ public class Character : MonoBehaviour
         meshRenderer.enabled = false;
         ClearBrick();
     }
+    private void OnDestroy()
+    {
+        //for (int i = brickList.Count - 1; i >= 0; i--)
+        //{
+        //    brickList[i].transform.SetParent(FindObjectOfType<PoolControl>().transform);
+        //    brickList[i].Despawn();
+        //}
+    }
+    
 }

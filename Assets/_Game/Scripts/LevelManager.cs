@@ -6,15 +6,16 @@ public class LevelManager : Singleton<LevelManager>
 {
     [SerializeField] private GameObject[] levelArray;
     [SerializeField] private Player player;
-    private GameObject currentLevel;
+    private GameObject currentLevelPrefab;
+    private Level currentLevel;
     private int levelIndex = 0;
-    private Transform startingPosition;
     public void LoadLevel()
     {
         DestroyLevel();
-        currentLevel = Instantiate(levelArray[levelIndex]);
+        currentLevelPrefab = Instantiate(levelArray[levelIndex]);
+        currentLevel = currentLevelPrefab.GetComponent<Level>();
         player.Initialize();
-        GameManager.Instance.RandomizeCharacterColor();
+        GameManager.Instance.RandomizeBotColor();
     }
     public void LoadNextLevel()
     {
@@ -25,11 +26,16 @@ public class LevelManager : Singleton<LevelManager>
         }
         LoadLevel();
     }
+    public List<Bot> GetBotListInCurrentLevel()
+    {
+        return currentLevel.GetBotList();
+    }
     private void DestroyLevel()
     {
-        if (currentLevel != null)
+        SimplePool.CollectAll();
+        if (currentLevelPrefab != null)
         {
-            Destroy(currentLevel);
+            DestroyImmediate(currentLevelPrefab);
         }
     }
 }

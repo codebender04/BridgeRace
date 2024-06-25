@@ -11,7 +11,6 @@ public class Player : Character
     [SerializeField] private float speed;
     [SerializeField] private LayerMask ground;
 
-    private bool isPausing;
 
     FloatingJoystick Joystick
     {
@@ -24,8 +23,10 @@ public class Player : Character
             return joystick;
         }
     }
-
-
+    private void Start()
+    {
+        ChangeColor(ColorType.Blue);
+    }
     public void Initialize()
     {
         meshRenderer.enabled = true;
@@ -41,17 +42,6 @@ public class Player : Character
     public void StopMovement()
     {
         rb.velocity = Vector3.zero;
-    }
-    protected override void GameManager_OnGameStateChanged(GameState newState)
-    {
-        if (newState == GameState.Pausing)
-        {
-            isPausing = true;
-        }
-        else if (newState == GameState.Playing)
-        {
-            isPausing = false;
-        }
     }
     private void HandleMovement()
     {

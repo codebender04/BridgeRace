@@ -18,6 +18,7 @@ public class CanvasSettings : UICanvas
         }
         else if (canvas is CanvasGameplay)
         {
+            buttons[2].SetActive(true);
             buttons[0].SetActive(true);
             buttons[1].SetActive(true);
         }

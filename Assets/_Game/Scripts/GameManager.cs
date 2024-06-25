@@ -8,11 +8,15 @@ public enum GameState { Pausing, Playing }
 
 public class GameManager : Singleton<GameManager>
 {
-    private Character[] characterArray = new Character[5];
-    private HashSet<ColorType> characterColorHashSet = new HashSet<ColorType>();
     public GameState GameState;
     public static event Action<GameState> OnGameStateChanged;
-    
+    private List<Bot> botList = new List<Bot>();
+    private List<ColorType> availableColors;
+
+    private void Awake()
+    {
+        ResetColor();
+    }
     private void Start()
     {
         ChangeGameState(GameState.Pausing);
@@ -23,22 +27,20 @@ public class GameManager : Singleton<GameManager>
         GameState = newState;
         OnGameStateChanged?.Invoke(newState);
     }
-    public void RandomizeCharacterColor()
+    public void RandomizeBotColor()
     {
-        //characterArray = FindObjectsOfType<Character>();
-        //ColorType color;
-        //if (characterArray.Length > Enum.GetNames(typeof(ColorType)).Length - 1) return;
-        //foreach (Character character in characterArray)
-        //{
-        //    do
-        //    {
-        //        color = (ColorType)Random.Range(1, Enum.GetNames(typeof(ColorType)).Length);
-        //    }
-        //    while (characterColorHashSet.Contains(color));
-        //    characterColorHashSet.Add(color);
-
-        //    character.ChangeColor(color);
-        //}
+        botList = LevelManager.Instance.GetBotListInCurrentLevel();
+        foreach (Bot bot in botList) 
+        {
+            int randomIndex = Random.Range(0, availableColors.Count);
+            bot.ChangeColor(availableColors[randomIndex]);
+            availableColors.RemoveAt(randomIndex);
+        }
+        ResetColor();
+    }
+    private void ResetColor()
+    {
+        availableColors = new List<ColorType> { ColorType.Red, ColorType.Green, ColorType.Orange, ColorType.Yellow };
     }
 
 }

@@ -13,12 +13,14 @@ public class Bot : Character
     private void Start()
     {
         ChangeState(new IdleState());
+        GameManager.OnGameStateChanged += GameManager_OnGameStateChanged;
     }
+
     private void Update()
     {
         currentState?.Execute(this);
     }
-    protected override void GameManager_OnGameStateChanged(GameState newState)
+    private void GameManager_OnGameStateChanged(GameState newState)
     {
         if (newState == GameState.Pausing)
         {

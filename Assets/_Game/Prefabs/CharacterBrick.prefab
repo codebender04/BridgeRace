@@ -67,6 +67,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbe67effb303e21459b7fd6e8ab7e75d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PoolType: 1
   tf: {fileID: 2397918365710710043}
   colorSO: {fileID: 11400000, guid: 6bb1bcdae1cfc344db158f5c3fc506a8, type: 2}
   meshRenderer: {fileID: 3908161557505456392}

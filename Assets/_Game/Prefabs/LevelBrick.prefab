@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1764809556901251144}
   m_Layer: 0
   m_Name: LevelBrick
-  m_TagString: Untagged
+  m_TagString: Level Brick
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -95,6 +95,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c7e3beb57256b4b924804b21bb8aa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PoolType: 0
   meshRenderer: {fileID: 3908161557505456392}
   colorSO: {fileID: 11400000, guid: 6bb1bcdae1cfc344db158f5c3fc506a8, type: 2}
   boxCollider: {fileID: 7748194214027138489}

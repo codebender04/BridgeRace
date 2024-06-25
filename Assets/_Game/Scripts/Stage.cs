@@ -9,7 +9,6 @@ public class Stage : MonoBehaviour
     [SerializeField] private Transform tf;
     private List<LevelBrick> levelBrickList = new List<LevelBrick>();
     private Bounds bounds;
-    private float timer = 0;
     private void Awake()
     {
         bounds = GetComponent<BoxCollider>().bounds;
@@ -36,7 +35,6 @@ public class Stage : MonoBehaviour
     public void AddBrick(LevelBrick brickToAdd)
     {
         levelBrickList.Add(brickToAdd);
-        brickToAdd.transform.SetParent(tf);
     }
     public Vector3 GetRandomPointInBounds()
     {
